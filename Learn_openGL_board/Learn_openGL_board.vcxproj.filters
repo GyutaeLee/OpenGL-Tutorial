@@ -125,5 +125,17 @@
     <None Include="framebuffers.vs">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="skybox.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="skybox.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="cubemaps.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="cubemaps.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>

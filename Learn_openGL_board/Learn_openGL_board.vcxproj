@@ -134,6 +134,8 @@
     <None Include="colors.vs" />
     <None Include="coordinate_system.fs" />
     <None Include="coordinate_system.vs" />
+    <None Include="cubemaps.fs" />
+    <None Include="cubemaps.vs" />
     <None Include="depth_testing.fs" />
     <None Include="depth_testing.vs" />
     <None Include="framebuffers.vs" />
@@ -154,6 +156,8 @@
     <None Include="multiple_light.vs" />
     <None Include="shader.fs" />
     <None Include="shader.vs" />
+    <None Include="skybox.fs" />
+    <None Include="skybox.vs" />
     <None Include="stencil_single_color.fs" />
     <None Include="stencil_testing.fs" />
     <None Include="stencil_testing.vs" />
