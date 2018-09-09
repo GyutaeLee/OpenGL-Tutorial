@@ -137,5 +137,44 @@
     <None Include="cubemaps.fs">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="advanced_glsl.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="blue.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="green.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="red.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="yellow.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="geometry_shader.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="geometry_shader.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="geometry_shader.gs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="default.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="default.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="normal_visualization.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="normal_visualization.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="normal_visualization.gs">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>
