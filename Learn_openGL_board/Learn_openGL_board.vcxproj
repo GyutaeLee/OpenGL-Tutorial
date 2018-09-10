@@ -150,6 +150,8 @@
     <None Include="geometry_shader.gs" />
     <None Include="geometry_shader.vs" />
     <None Include="green.fs" />
+    <None Include="instancing.fs" />
+    <None Include="instancing.vs" />
     <None Include="lamp.fs" />
     <None Include="lamp.vs" />
     <None Include="lighting_maps.fs" />

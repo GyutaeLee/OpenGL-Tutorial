@@ -176,5 +176,11 @@
     <None Include="normal_visualization.gs">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="instancing.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="instancing.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>
