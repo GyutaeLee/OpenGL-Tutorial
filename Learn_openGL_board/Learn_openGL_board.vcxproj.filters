@@ -182,5 +182,8 @@
     <None Include="instancing.fs">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="asteroid.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>
