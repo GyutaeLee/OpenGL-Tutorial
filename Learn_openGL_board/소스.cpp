@@ -5,7 +5,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-//#include <learnopengl/filesystem.h>
 #include <learnopengl/shader.h>
 //#include <learnopengl/shader_m.h>
 #include <learnopengl/camera.h>
@@ -14,6 +13,16 @@
 #include "stb_image.h"
 
 #include <iostream>
+#include <random>
+
+#define STB_IMAGE_IMPLEMENTATION
+//#include "chanAssetManager.h"
+//#include "chanRenderObject.h"
+//#include "chanCamera.h"
+
+
+
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -25,6 +34,8 @@ unsigned int loadCubemap(vector<std::string> faces);
 // settings
 const unsigned int SCR_WIDTH = 1280;
 const unsigned int SCR_HEIGHT = 720;
+bool blinn = false;
+bool blinnKeyPressed = false;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -37,7 +48,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 // lighting
-glm::vec3 lightPos(-1.f, 1.0f, -1.0f);
+glm::vec3 lightPos(0.0f,0.0f,0.0f);
 
 int main()
 {
@@ -81,13 +92,48 @@ int main()
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	// build and compile our shader zprogram
 	// ------------------------------------
 	Shader shader("default.vs", "default.fs");
 	Shader asteroidShader("asteroid.vs", "default.fs");
+	Shader phongShader("advanced_lighting.vs", "advanced_lighting.fs");
 	//Shader instancingShader("instancing.vs", "instancing.fs");
 	//Shader normalShader("normal_visualization.vs", "normal_visualization.fs", "normal_visualization.gs");
 
+	float planeVertices[] = {
+		// positions            // normals         // texcoords
+		10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+		-10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
+		-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
+
+		10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+		-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
+		10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,  10.0f, 10.0f
+	};
+
+	// plane VAO
+	unsigned int planeVAO, planeVBO;
+	glGenVertexArrays(1, &planeVAO);
+	glGenBuffers(1, &planeVBO);
+	glBindVertexArray(planeVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glBindVertexArray(0);
+
+	unsigned int floorTexture = loadTexture("wood.png");
+
+	phongShader.use();
+	phongShader.setInt("texture1", 0);
+	
 	Model nanosuit("nanosuit/nanosuit.obj");
 	Model rock("rock/rock.obj");
 	Model planet("planet/planet.obj");
@@ -225,6 +271,23 @@ int main()
 		shader.use();
 		shader.setMat4("projection", projection);
 		shader.setMat4("view", view);
+		
+		phongShader.use();
+		phongShader.setMat4("projection", projection);
+		phongShader.setMat4("view", view);
+
+		phongShader.setVec3("viewPos", camera.Position);
+		phongShader.setVec3("lightPos", lightPos);
+		phongShader.setInt("blinn", blinn);
+
+		glBindVertexArray(planeVAO);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, floorTexture);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		std::cout << (blinn ? "Blinn-Phong" : "Phong") << std::endl;
+
+		
 
 		glm::mat4 model(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -3.0f, 0.0f));
@@ -234,7 +297,7 @@ int main()
 		
 		shader.setFloat("time", glfwGetTime());
 
-		//nanosuit.Draw(shader);
+		nanosuit.Draw(shader);
 		
 		asteroidShader.use();
 		asteroidShader.setInt("texture_diffuse1", 0);
@@ -263,8 +326,8 @@ int main()
 		glfwPollEvents();
 	}
 
-//	glDeleteVertexArrays(1, &quadVAO);
-//	glDeleteBuffers(1, &quadVBO);
+	glDeleteVertexArrays(1, &planeVAO);
+	glDeleteBuffers(1, &planeVBO);
 
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	// ------------------------------------------------------------------
@@ -287,6 +350,16 @@ void processInput(GLFWwindow *window)
 		camera.ProcessKeyboard(LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
+
+	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS && !blinnKeyPressed)
+	{
+		blinn = !blinn;
+		blinnKeyPressed = true;
+	}
+	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_RELEASE)
+	{
+		blinnKeyPressed = false;
+	}
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

@@ -127,6 +127,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="advanced_glsl.vs" />
+    <None Include="advanced_lighting.fs" />
+    <None Include="advanced_lighting.vs" />
     <None Include="asteroid.vs" />
     <None Include="basic_lighting.fs" />
     <None Include="basic_lighting.vs" />

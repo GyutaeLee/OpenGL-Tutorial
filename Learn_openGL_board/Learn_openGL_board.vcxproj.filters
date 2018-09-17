@@ -22,7 +22,7 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="stb_image.cpp">
-      <Filter>리소스 파일</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +183,12 @@
       <Filter>리소스 파일</Filter>
     </None>
     <None Include="asteroid.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="advanced_lighting.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="advanced_lighting.fs">
       <Filter>리소스 파일</Filter>
     </None>
   </ItemGroup>
