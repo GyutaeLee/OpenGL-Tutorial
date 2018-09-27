@@ -141,6 +141,8 @@
     <None Include="coordinate_system.vs" />
     <None Include="cubemaps.fs" />
     <None Include="cubemaps.vs" />
+    <None Include="debug_quad.vs" />
+    <None Include="debug_quad_depth.fs" />
     <None Include="default.fs" />
     <None Include="default.vs" />
     <None Include="depth_testing.fs" />
@@ -149,6 +151,8 @@
     <None Include="framebuffers.fs" />
     <None Include="framebuffers_screen.fs" />
     <None Include="framebuffers_screen.vs" />
+    <None Include="gamma_correction.fs" />
+    <None Include="gamma_correction.vs" />
     <None Include="geometry_shader.fs" />
     <None Include="geometry_shader.gs" />
     <None Include="geometry_shader.vs" />
@@ -173,6 +177,10 @@
     <None Include="red.fs" />
     <None Include="shader.fs" />
     <None Include="shader.vs" />
+    <None Include="shadow_mapping.fs" />
+    <None Include="shadow_mapping.vs" />
+    <None Include="shadow_mapping_depth.fs" />
+    <None Include="shadow_mapping_depth.vs" />
     <None Include="skybox.fs" />
     <None Include="skybox.vs" />
     <None Include="stencil_single_color.fs" />
