@@ -215,5 +215,11 @@
     <None Include="shadow_mapping.fs">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="normal_mapping.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="normal_mapping.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>

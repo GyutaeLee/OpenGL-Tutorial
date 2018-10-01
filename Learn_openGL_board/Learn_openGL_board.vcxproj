@@ -171,6 +171,8 @@
     <None Include="model_loading.vs" />
     <None Include="multiple_light.fs" />
     <None Include="multiple_light.vs" />
+    <None Include="normal_mapping.fs" />
+    <None Include="normal_mapping.vs" />
     <None Include="normal_visualization.fs" />
     <None Include="normal_visualization.gs" />
     <None Include="normal_visualization.vs" />
