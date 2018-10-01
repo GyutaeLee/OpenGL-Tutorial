@@ -221,5 +221,11 @@
     <None Include="normal_mapping.fs">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="parallax_mapping.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="parallax_mapping.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>

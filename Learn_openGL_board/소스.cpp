@@ -38,6 +38,7 @@ void renderQuad();
 // settings
 const unsigned int SCR_WIDTH = 1280;
 const unsigned int SCR_HEIGHT = 720;
+float heightScale = 0.1;
 bool blinn = false;
 bool blinnKeyPressed = false;
 bool gammaEnabled = false;
@@ -114,6 +115,7 @@ int main()
 	Shader simpleDepthShader("shadow_mapping_depth.vs", "shadow_mapping_depth.fs");
 	Shader debugDepthQuad("debug_quad.vs", "debug_quad_depth.fs");
 	Shader normal_mappingShader("normal_mapping.vs", "normal_mapping.fs");
+	Shader parallax_mappingShader("parallax_mapping.vs", "parallax_mapping.fs");
 	//Shader instancingShader("instancing.vs", "instancing.fs");
 	//Shader normalShader("normal_visualization.vs", "normal_visualization.fs", "normal_visualization.gs");
 
@@ -148,6 +150,10 @@ int main()
 	unsigned int floorTextureGammaCorrected = loadTexture("wood.png",true);
 	unsigned int diffuseMap = loadTexture("brickwall.jpg");
 	unsigned int normalMap = loadTexture("brickwall_normal.jpg");
+
+	unsigned int parallax_diffuseMap = loadTexture("bricks2.jpg");
+	unsigned int parallax_normalMap = loadTexture("bricks2_normal.jpg");
+	unsigned int parallax_heightMap = loadTexture("bricks2_disp.jpg");
 
 	//phongShader.use();
 	//phongShader.setInt("texture1", 0);
@@ -187,7 +193,13 @@ int main()
 	normal_mappingShader.setInt("diffuseMap",0);
 	normal_mappingShader.setInt("normalMap",1);
 
-	glm::vec3 lightPos(-0.5f, 1.0f, 0.3f);
+	parallax_mappingShader.use();
+	parallax_mappingShader.setInt("diffuseMap", 0);
+	parallax_mappingShader.setInt("normalMap", 1);
+	parallax_mappingShader.setInt("depthMap", 2);
+
+	//glm::vec3 lightPos(-0.5f, 1.0f, 0.3f);
+	glm::vec3 lightPos(0.5f, 1.0f, 0.3f);
 
 	// lighting info
 	// -------------
@@ -467,7 +479,28 @@ int main()
 		model = glm::scale(model, glm::vec3(0.1f));
 		shader.setMat4("model", model);
 		renderQuad();
+
+
+		parallax_mappingShader.use();
+		parallax_mappingShader.setMat4("projection", projection);
+		parallax_mappingShader.setMat4("view", view);
 		
+		model = glm::mat4(1.0);
+		model = glm::rotate(model, glm::radians((float)glfwGetTime() * 10.0f), glm::normalize(glm::vec3(1.0, 0.0, 1.0))); // rotate the quad to show parallax mapping from multiple directions
+		parallax_mappingShader.setMat4("model", model);
+		parallax_mappingShader.setVec3("viesPos", camera.Position);
+		parallax_mappingShader.setVec3("lightPos", lightPos);
+		parallax_mappingShader.setFloat("heightScale", heightScale);
+		//std::cout << heightScale << std::endl;
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, parallax_diffuseMap);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, parallax_normalMap);
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, parallax_heightMap);
+		renderQuad();
+
+
         // render Depth map to quad for visual debugging
         // ---------------------------------------------
         debugDepthQuad.use();
