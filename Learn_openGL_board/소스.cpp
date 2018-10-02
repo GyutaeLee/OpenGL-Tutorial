@@ -155,6 +155,11 @@ int main()
 	unsigned int parallax_normalMap = loadTexture("bricks2_normal.jpg");
 	unsigned int parallax_heightMap = loadTexture("bricks2_disp.jpg");
 
+
+	unsigned int parallax_diffuseMap1 = loadTexture("toy_box_diffuse.png");
+	unsigned int parallax_normalMap1 = loadTexture("toy_box_normal.png");
+	unsigned int parallax_heightMap1 = loadTexture("toy_box_disp.png");
+
 	//phongShader.use();
 	//phongShader.setInt("texture1", 0);
 	
@@ -325,7 +330,6 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glVertexAttribDivisor(2, 1); // tell OpenGL this is an instanced vertex attribute.
 	
-
 	// render loop
 	// -----------
 	while (!glfwWindowShouldClose(window))
@@ -418,7 +422,7 @@ int main()
 
 		nanosuit.Draw(normalShader);
 		*/
-
+		/*
 		glm::mat4 lightProjection(1.0f), lightView(1.0f);
         glm::mat4 lightSpaceMatrix(1.0f);
         float near_plane = 1.0f, far_plane = 7.5f;
@@ -478,17 +482,19 @@ int main()
 		model = glm::translate(model, lightPos);
 		model = glm::scale(model, glm::vec3(0.1f));
 		shader.setMat4("model", model);
-		renderQuad();
+		renderQuad();*/
 
 
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 view = camera.GetViewMatrix();
 		parallax_mappingShader.use();
 		parallax_mappingShader.setMat4("projection", projection);
 		parallax_mappingShader.setMat4("view", view);
 		
-		model = glm::mat4(1.0);
-		model = glm::rotate(model, glm::radians((float)glfwGetTime() * 10.0f), glm::normalize(glm::vec3(1.0, 0.0, 1.0))); // rotate the quad to show parallax mapping from multiple directions
+		glm::mat4 model(1.0);
+		model = glm::rotate(model, glm::radians((float)glfwGetTime() * -10.0f), glm::normalize(glm::vec3(1.0, 0.0, 1.0))); // rotate the quad to show parallax mapping from multiple directions
 		parallax_mappingShader.setMat4("model", model);
-		parallax_mappingShader.setVec3("viesPos", camera.Position);
+		parallax_mappingShader.setVec3("viewPos", camera.Position);
 		parallax_mappingShader.setVec3("lightPos", lightPos);
 		parallax_mappingShader.setFloat("heightScale", heightScale);
 		//std::cout << heightScale << std::endl;
@@ -499,9 +505,44 @@ int main()
 		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_2D, parallax_heightMap);
 		renderQuad();
+		
+		// render light source
+		model = glm::mat4(1.0);
+		model = glm::translate(model, lightPos);
+		model = glm::scale(model, glm::vec3(0.1f));
+		parallax_mappingShader.setMat4("model", model);
+		renderQuad();
 
 
-        // render Depth map to quad for visual debugging
+
+		parallax_mappingShader.use();
+		parallax_mappingShader.setMat4("projection", projection);
+		parallax_mappingShader.setMat4("view", view);
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, { 3.0, 0.0, 0.0 });
+		model = glm::rotate(model, glm::radians((float)glfwGetTime() * -10.0f), glm::normalize(glm::vec3(1.0, 0.0, 1.0))); // rotate the quad to show parallax mapping from multiple directions
+		parallax_mappingShader.setMat4("model", model);
+		parallax_mappingShader.setVec3("viewPos", camera.Position);
+		parallax_mappingShader.setVec3("lightPos", lightPos);
+		parallax_mappingShader.setFloat("heightScale", heightScale);
+		//std::cout << heightScale << std::endl;
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, parallax_diffuseMap1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, parallax_normalMap1);
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, parallax_heightMap1);
+		renderQuad();
+
+		// render light source
+		model = glm::mat4(1.0);
+		model = glm::translate(model, { lightPos.x + 3.0, lightPos.y, lightPos.z });
+		model = glm::scale(model, glm::vec3(0.1f));
+		parallax_mappingShader.setMat4("model", model);
+		renderQuad();
+
+      /*  // render Depth map to quad for visual debugging
         // ---------------------------------------------
         debugDepthQuad.use();
         debugDepthQuad.setFloat("near_plane", near_plane);
@@ -509,7 +550,7 @@ int main()
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, depthMap);
         //renderQuad();
-		
+		*/
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
