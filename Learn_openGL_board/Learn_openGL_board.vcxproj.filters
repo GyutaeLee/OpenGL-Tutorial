@@ -227,5 +227,59 @@
     <None Include="parallax_mapping.fs">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="lighting.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="lighting.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="hdr.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="hdr.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="fbo_debug.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="fbo_debug.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="deferred_shading.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="deferred_shading.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="deferred_light_box.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="deferred_light_box.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="g_buffer.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="g_buffer.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="ssao.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="ssao.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="ssao_geometry.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="ssao_geometry.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="ssao_lighting.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="ssao_blur.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>
