@@ -190,6 +190,8 @@
     <None Include="normal_visualization.vs" />
     <None Include="parallax_mapping.fs" />
     <None Include="parallax_mapping.vs" />
+    <None Include="pbr.fs" />
+    <None Include="pbr.vs" />
     <None Include="red.fs" />
     <None Include="shader.fs" />
     <None Include="shader.vs" />

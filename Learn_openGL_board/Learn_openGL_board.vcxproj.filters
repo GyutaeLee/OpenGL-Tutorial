@@ -281,5 +281,11 @@
     <None Include="ssao_blur.fs">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="pbr.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="pbr.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>

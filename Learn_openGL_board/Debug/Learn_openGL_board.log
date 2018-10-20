@@ -6,16 +6,19 @@ c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\include\assimp
 c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\include\assimp\matrix4x4.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
 c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\include\assimp\matrix3x3.inl : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
 c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\include\assimp\matrix4x4.inl : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
-c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(39): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(198): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(245): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(327): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(328): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(429): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(430): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(434): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(435): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(437): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(438): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(447): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(40): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(151): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(292): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(293): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(297): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(298): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(300): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(301): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(310): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(608): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(649): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(673): warning C4244: '인수': 'float'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(675): warning C4244: '인수': 'float'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\134461\desktop\opengl\opengl_tutorial\learn_opengl_board\learn_opengl_board\소스.cpp(677): warning C4244: '인수': 'float'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+LINK : warning LNK4098: 'MSVCRT' defaultlib가 다른 라이브러리와 충돌합니다. /NODEFAULTLIB:library를 사용하십시오.
   Learn_openGL_board.vcxproj -> C:\Users\134461\Desktop\OpenGL\OpenGL_Tutorial\Learn_openGL_board\Debug\Learn_openGL_board.exe
