@@ -173,6 +173,7 @@
     <None Include="hdr.vs" />
     <None Include="instancing.fs" />
     <None Include="instancing.vs" />
+    <None Include="irradiance_convolution.fs" />
     <None Include="lamp.fs" />
     <None Include="lamp.vs" />
     <None Include="lighting.fs" />

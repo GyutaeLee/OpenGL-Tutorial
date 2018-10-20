@@ -10,6 +10,8 @@ uniform float metallic;
 uniform float roughness;
 uniform float ao;
 
+// IBL
+uniform samplerCube irradianceMap;
 
 // lights
 uniform vec3 lightPositions[4];
@@ -63,6 +65,7 @@ void main()
 {
 	vec3 N = normalize(Normal);
 	vec3 V = normalize(camPos - WorldPos);
+	vec3 R = reflect(-V, N);
 
 	// 수직 입사각에서 반사율을 계산
 	// dia-electric(플라스틱간은)이 0.04의 F0를 사용하고
@@ -109,9 +112,14 @@ void main()
 		Lo += (kD * albedo / PI + specular) * radiance * NdotL;
 	}
 
-	// ambient lighting (주변 조명)
-	// 다음 IBL 튜토리얼은 이 ambient lighting을 environment lighting으로 대체함
-	vec3 ambient = vec3(0.03) * albedo * ao;
+	// ambient lighting (우리는 지금 IBL을 ambient 용어로 사용할 것이다)
+	vec3 kS = fresnelSchlick(max(dot(N,V),0.0),F0);
+	vec3 kD = 1.0 - kS;
+	kD *= 1.0 - metallic;
+	vec3 irradiance = texture(irradianceMap, N).rgb;
+	vec3 diffuse = irradiance * albedo;
+	vec3 ambient = (kD * diffuse) * ao;
+	// vec3 ambient = vec3(0.002);
 
 	vec3 color = ambient + Lo;
 

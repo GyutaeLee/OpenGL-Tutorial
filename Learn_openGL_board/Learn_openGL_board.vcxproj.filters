@@ -302,5 +302,8 @@
     <None Include="background.fs">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="irradiance_convolution.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>
