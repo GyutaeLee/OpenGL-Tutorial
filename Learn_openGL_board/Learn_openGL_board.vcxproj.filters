@@ -287,5 +287,20 @@
     <None Include="pbr.fs">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="pbrTexture.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="cubemap.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="equirectangular_to_cubemap.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="background.vs">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="background.fs">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>

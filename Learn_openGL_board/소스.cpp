@@ -108,12 +108,18 @@ int main()
 	// configure global opengl state
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL); // skybox의 깊이 트릭을 위해 깊이 함수를 and보다 작게 설정해라
 
 	Shader pbrShader("pbr.vs", "pbr.fs");
+	Shader equirectangularToCubemapShader("cubemap.vs", "equirectangular_to_cubemap.fs");
+	Shader backgroundShader("background.vs", "background.fs");
 
 	pbrShader.use();
 	pbrShader.setVec3("albedo", 0.5f, 0.0f, 0.0f);
 	pbrShader.setFloat("ao", 1.0f);
+
+	backgroundShader.use();
+	backgroundShader.setInt("environmentMap", 0);
 
 	// lights
 	// ------
@@ -129,19 +135,101 @@ int main()
 		glm::vec3(300.0f, 300.0f, 300.0f),
 		glm::vec3(300.0f, 300.0f, 300.0f)
 	};
-
+	
 	int nrRows = 7;
 	int nrColumns = 7;
 	float spacing = 2.5;
 
+	// pbr: setup framebuffer
+	unsigned int captureFBO;
+	unsigned int captureRBO;
+	glGenFramebuffers(1, &captureFBO);
+	glGenRenderbuffers(1, &captureRBO);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+	glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
+
+	// pbr: load the HDR environment map
+	stbi_set_flip_vertically_on_load(true);
+	int width, height, nrComponents;
+	float *data = stbi_loadf("hdr/newport_loft.hdr", &width, &height, &nrComponents, 0);
+	unsigned int hdrTexture;
+	if (data)
+	{
+		glGenTextures(1, &hdrTexture);
+		glBindTexture(GL_TEXTURE_2D, hdrTexture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data); // 텍스처의 데이터 값을 float로 지정하는 방법에 유의해라
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		stbi_image_free(data);
+	}
+	else
+	{
+		std::cout << "Failed to load HDR image." << std::endl;
+	}
+
+	// pbr: setup cubemap to render to and attach to framebuffer
+	unsigned int envCubemap;
+	glGenTextures(1, &envCubemap);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
+	for (unsigned int i = 0; i < 6; i++) {
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 512, 512, 0, GL_RGB, GL_FLOAT, nullptr);
+	}
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// pbr: set up projection and view matrices for capturing data onto the 6 cubemap face directions
+	glm::mat4 captureProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
+	glm::mat4 captureViews[] =
+	{
+
+		glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+		glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+		glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec3(0.0f,  0.0f,  1.0f)),
+		glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f, -1.0f)),
+		glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+		glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
+	};
+
+	// pbr: convert HDR equirectangular environment map to cubemap equivalent
+	equirectangularToCubemapShader.use();
+	equirectangularToCubemapShader.setInt("equirectangularMap", 0);
+	equirectangularToCubemapShader.setMat4("projection", captureProjection);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, hdrTexture);
+
+	glViewport(0, 0, 512, 512); // 뷰포트를 캡처 치수로 구성하는 것을 잊지말아라
+	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+	for (unsigned int i = 0; i < 6; i++)
+	{
+		equirectangularToCubemapShader.setMat4("view", captureViews[i]);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, envCubemap, 0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		renderCube();
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	// 렌더링 전에 정적 쉐이더 유니폼 초기화
 	glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 	pbrShader.use();
-	pbrShader.setMat4("projection", projection); 
+	pbrShader.setMat4("projection", projection);
+	backgroundShader.use();
+	backgroundShader.setMat4("projection", projection);
 
-	// load models
-//	Model nanosuit("nanosuit/nanosuit.obj");
-	Model nanosuit("royal-rooster/rooster.dae");
-
+	// 렌더링 전에 뷰포트를 원래 프레임 버퍼의 화면 크기로 구성한다
+	int scrWidth, scrHeight;
+	glfwGetFramebufferSize(window, &scrWidth, &scrHeight);
+	glViewport(0, 0, scrWidth, scrHeight);
 
 	// render loop
 	// -----------
@@ -159,48 +247,63 @@ int main()
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 		
+		// 장면을 렌더링하고, 최종 쉐이더에 복잡한 방사 조도 맵을 제공한다
 		pbrShader.use();
 		glm::mat4 view = camera.GetViewMatrix();
-		glm::mat4 model(1.0);
 		pbrShader.setMat4("view", view);
 		pbrShader.setVec3("camPos", camera.Position);
 
-		for (int row = 0; row < nrRows; ++row) {
+		// 텍스처로 정의된 material property를 가진 구체의 열 번호를 렌더링한다
+		// (모두 동일한 재질 속성을 가진다)
+		glm::mat4 model(1.0);
+		for (int row = 0; row < nrRows; ++row)
+		{
 			pbrShader.setFloat("metallic", (float)row / (float)nrRows);
-			for (int col = 0; col < nrColumns; ++col) {
-				// 우리는 완벽하게 매끄러운 표면(거칠기 0.0)이 direct light 에서
+			for (int col = 0; col < nrColumns; ++col)
+			{
+				// 우리는 완벽하게 매끄러운 표면이 direct light에서
 				// 약간 벗어나는 경향이 있어 거칠기를 0.025 - 1.0으로 고정시킨다
 				pbrShader.setFloat("roughness", glm::clamp((float)col / (float)nrColumns, 0.05f, 1.0f));
 
 				model = glm::mat4(1.0);
 				model = glm::translate(model, glm::vec3(
-					(col - (nrColumns / 2)) * spacing,
-					(row - (nrRows / 2)) * spacing,
-					0.0f
+					(float)(col - (nrColumns / 2)) * spacing,
+					(float)(row - (nrRows / 2)) * spacing,
+					-2.0f
 				));
 				pbrShader.setMat4("model", model);
-				//nanosuit.Draw(pbrShader);
 				renderSphere();
 			}
 		}
 
-		// 광원을 렌더링하다 (간단한 위치에서 구체를 다시 렌더링하는 것)
-		// 이것은 우리가 같은 쉐이더를 사용할 때 약간 벗어난 것처럼 보이지만,
-		// 그것들의 위치를 분명히 하고 코드 맵을 작게 유지할 것이다.
-		for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); ++i) {
+		// 광원을 렌더링 (빛의 위치에서 구체를 다시 렌더링하기만 하면 됨)
+		// 동이한 쉐이더를 사용할 때 약간 떨어져 보이지만 위치가 분명해지고 코드 인쇄가 작게 유지된다
+		for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); i++) {
 			glm::vec3 newPos = lightPositions[i] + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
 			newPos = lightPositions[i];
 			pbrShader.setVec3("lightPositions[" + std::to_string(i) + "]", newPos);
 			pbrShader.setVec3("lightColors[" + std::to_string(i) + "]", lightColors[i]);
 
-			model = glm::mat4(1.0);
+			model = glm::mat4();
 			model = glm::translate(model, newPos);
 			model = glm::scale(model, glm::vec3(0.5f));
 			pbrShader.setMat4("model", model);
 			renderSphere();
 		}
 
-
+		// render skybox (덧붙여 그려지는 것을 방지해 마지막에 그린다)
+		backgroundShader.use();
+		backgroundShader.setMat4("view", view);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
+		renderCube();
+/*
+		equirectangularToCubemapShader.use();
+		equirectangularToCubemapShader.setMat4("view", view);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, hdrTexture);
+		renderCube();
+		*/
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc)
 		glfwSwapBuffers(window);

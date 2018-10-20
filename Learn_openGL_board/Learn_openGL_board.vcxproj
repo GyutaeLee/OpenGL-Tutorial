@@ -130,6 +130,8 @@
     <None Include="advanced_lighting.fs" />
     <None Include="advanced_lighting.vs" />
     <None Include="asteroid.vs" />
+    <None Include="background.fs" />
+    <None Include="background.vs" />
     <None Include="basic_lighting.fs" />
     <None Include="basic_lighting.vs" />
     <None Include="blending.fs" />
@@ -139,6 +141,7 @@
     <None Include="colors.vs" />
     <None Include="coordinate_system.fs" />
     <None Include="coordinate_system.vs" />
+    <None Include="cubemap.vs" />
     <None Include="cubemaps.fs" />
     <None Include="cubemaps.vs" />
     <None Include="debug_quad.vs" />
@@ -151,6 +154,7 @@
     <None Include="deferred_shading.vs" />
     <None Include="depth_testing.fs" />
     <None Include="depth_testing.vs" />
+    <None Include="equirectangular_to_cubemap.fs" />
     <None Include="fbo_debug.fs" />
     <None Include="fbo_debug.vs" />
     <None Include="framebuffers.vs" />
@@ -192,6 +196,7 @@
     <None Include="parallax_mapping.vs" />
     <None Include="pbr.fs" />
     <None Include="pbr.vs" />
+    <None Include="pbrTexture.fs" />
     <None Include="red.fs" />
     <None Include="shader.fs" />
     <None Include="shader.vs" />
